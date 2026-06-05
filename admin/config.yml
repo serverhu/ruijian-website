@@ -5,7 +5,7 @@ backend:
   name: github
   repo: serverhu/ruijian-website
   branch: main
-  # 使用 Personal Access Token 登录，不需要 OAuth
+  auth_endpoint: custom  # 使用 Personal Access Token 登录
 
 # 本地预览时不需要认证
 local_backend: true
