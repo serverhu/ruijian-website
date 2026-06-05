@@ -1,72 +1,22 @@
 # 瑞建石油装备 - Decap CMS 配置
-# 文档: https://decapcms.org/docs/configuration-options/
-
 backend:
   name: github
   repo: serverhu/ruijian-website
   branch: main
-  auth_endpoint: custom  # 使用 Personal Access Token 登录
+  base_url: https://ruijian.pages.dev
+  auth_endpoint: api/auth
 
-# 本地预览时不需要认证
-local_backend: true
-
-# 媒体文件（图片、PDF等）存放目录
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
-i18n:
-  structure: multiple_folders   # 按语言分目录
-  locales: [zh, en, ar, ru, es, fr]
-  default_locale: zh
-
 collections:
-  # ===== 网站设置 =====
   - name: "settings"
     label: "网站设置"
     files:
       - name: "company"
         label: "公司信息"
         file: "data/company.yml"
-        i18n: true
         fields:
-          - { label: "公司名称", name: "name", widget: "string", i18n: true }
-          - { label: "公司简称", name: "short_name", widget: "string", i18n: true }
-          - { label: "地址（黑龙江工厂）", name: "address_hlj", widget: "string", i18n: true }
-          - { label: "地址（天津销售中心）", name: "address_tj", widget: "string", i18n: true }
+          - { label: "公司名称", name: "name", widget: "string" }
           - { label: "联系电话", name: "phone", widget: "string" }
           - { label: "邮箱", name: "email", widget: "string" }
-          - { label: "网址", name: "website", widget: "string" }
-
-  # ===== 首页内容 =====
-  - name: "homepage"
-    label: "首页"
-    files:
-      - name: "hero"
-        label: "Hero 区域"
-        file: "data/hero.yml"
-        i18n: true
-        fields:
-          - { label: "标签", name: "badge", widget: "string", i18n: true }
-          - { label: "标题", name: "title", widget: "string", i18n: true }
-          - { label: "描述", name: "description", widget: "text", i18n: true }
-          - { label: "按钮1 文本", name: "btn1_text", widget: "string", i18n: true }
-          - { label: "按钮1 链接", name: "btn1_link", widget: "string" }
-          - { label: "按钮2 文本", name: "btn2_text", widget: "string", i18n: true }
-          - { label: "按钮2 链接", name: "btn2_link", widget: "string" }
-
-  # ===== 产品管理 =====
-  - name: "products"
-    label: "产品管理"
-    folder: "data/products"
-    i18n: true
-    create: true
-    slug: "{{slug}}"
-    fields:
-      - { label: "产品名称", name: "title", widget: "string", i18n: true }
-      - { label: "分类", name: "category", widget: "select",
-            options: ["石油套管", "油管", "钻杆", "钻铤", "无缝钢管", "接箍"] }
-      - { label: "简短描述", name: "description", widget: "text", i18n: true }
-      - { label: "规格", name: "specs", widget: "string", i18n: true }
-      - { label: "钢级", name: "grades", widget: "string", i18n: true }
-      - { label: "图片", name: "image", widget: "image" }
-      - { label: "排序", name: "order", widget: "number", value_type: "int" }
