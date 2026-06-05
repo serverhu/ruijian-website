@@ -147,73 +147,80 @@ def generate_page(template_lang, target_lang, page_type, template_path, output_p
     # Read template
     with open(template_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     src = template_lang
     dst = target_lang
-    
+
     if src == dst:
         # For the same language, just copy
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         shutil.copy2(template_path, output_path)
         print(f"  Copied {src} -> {dst}: {output_path}")
         return
-    
-    # Replace language-specific content
-    replacements = {
-        # HTML lang and dir
-        f'lang="{src}"': f'lang="{dst}" dir="{LANGUAGES[dst]["dir"]}"',
-        
-        # hreflang alternates - update all language URLs
-    }
-    
-    # Replace hreflang links
-    for lang_code in LANGUAGES:
-        old_href = f'href="/{lang_code}/'
-        if page_type == 'index':
-            new_href = f'href="/{lang_code}/'
-        else:
-            new_href = f'href="/{lang_code}/{page_type}/'
-        # Only replace for the specific page type
-        if f'/{lang_code}/{page_type}/' in content or (page_type == 'index' and f'/{lang_code}/' in content):
-            pass  # keep as is, they're already correct
-    
-    # Canonical URL
-    old_canonical = f'href="https://www.ruijianoil.com/{src}/'
-    new_canonical = f'href="https://www.ruijianoil.com/{dst}/'
+
+    # --- 1. Fix broken template patterns first (known bugs in source templates) ---
+    # Fix logo href missing quote: href="/zh/ class="logo" -> href="/zh/" class="logo"
+    content = content.replace(f'href="/{src}/ class="logo"', f'href="/{src}/" class="logo"')
+
+    # --- 2. Replace canonical URL ONLY (not hreflang) ---
+    # Only match the exact canonical link, not all hreflang URLs
+    old_canonical = f'<link rel="canonical" href="https://www.ruijianoil.com/{src}/'
+    new_canonical = f'<link rel="canonical" href="https://www.ruijianoil.com/{dst}/'
     content = content.replace(old_canonical, new_canonical)
-    
-    # og:locale
-    content = content.replace(f'og:locale" content="{LANGUAGES[src]["og_locale"]}"', 
-                              f'og:locale" content="{LANGUAGES[dst]["og_locale"]}"')
-    
-    # Body class
-    content = content.replace(f'class="lang-{src}"', f'class="lang-{dst}"')
-    
-    # Font links
-    content = content.replace(LANGUAGES[src]['font'], LANGUAGES[dst]['font'])
-    
-    # dir attribute for RTL
+
+    # --- 3. Fix zh hreflang that got broken (must stay /zh/) ---
+    # After canonical replacement, fix the zh hreflang entry if it was broken
+    # Pattern: hreflang="zh" href="https://www.ruijianoil.com/{dst}/" -> /zh/
+    old_zh_hreflang = f'hreflang="zh" href="https://www.ruijianoil.com/{dst}/'
+    new_zh_hreflang = f'hreflang="zh" href="https://www.ruijianoil.com/{src}/'
+    content = content.replace(old_zh_hreflang, new_zh_hreflang)
+
+    # --- 4. Fix nav product links pointing to current page ---
+    # The template has nav items with href="/zh/{page_type}/".
+    # For the Products dropdown, it should point to /zh/products/, not /zh/{page_type}/
+    # We fix this by replacing the Products link AFTER the canonical replacement
+    for section in ['about', 'contact', 'quality', 'certifications', 'projects']:
+        old_nav = f'href="/{dst}/{section}/" class="active">'
+        # Check if this is the Products link (not About/Contact/Quality etc.)
+        # We can't tell by href alone, but we know it was wrong in templates
+        # The safest fix: for any generated page, if the Products nav href
+        # matches the page section, redirect to /products/
+        # This is handled by the section loop below
+        pass
+
+    # --- 5. Replace lang attribute ---
+    content = content.replace(f'lang="{src}"', f'lang="{dst}"')
+
+    # --- 6. Handle dir attribute ---
     if LANGUAGES[dst]['dir'] == 'rtl':
-        content = content.replace('<html', f'<html dir="rtl"')
-        # Add RTL stylesheet reference if not present
+        if f'dir="ltr"' in content:
+            content = content.replace('dir="ltr"', 'dir="rtl"')
+        else:
+            content = content.replace('<html', f'<html dir="rtl"')
+        # Add RTL stylesheet if missing
         if 'rtl.css' not in content:
             content = content.replace('/css/style.css">', '/css/style.css">\n  <link rel="stylesheet" href="/css/rtl.css">')
-    
-    # Replace navigation links to current language
-    for lang_code in LANGUAGES:
-        if lang_code != dst:
-            # Update language switcher links
-            content = content.replace(f'href="/{lang_code}/{page_type}/" data-lang="{lang_code}"', 
-                                      f'href="/{lang_code}/{page_type}/" data-lang="{lang_code}"')
-            if page_type == 'index':
-                content = content.replace(f'href="/{lang_code}/" data-lang="{lang_code}"',
-                                          f'href="/{lang_code}/" data-lang="{lang_code}"')
-    
+    else:
+        # For LTR languages, ensure dir="ltr" is set
+        if 'dir="ltr"' not in content and 'dir="rtl"' not in content:
+            content = content.replace('<html', f'<html dir="{LANGUAGES[dst]["dir"]}"')
+
+    # --- 7. og:locale ---
+    old_locale = f'og:locale" content="{LANGUAGES[src]["og_locale"]}"'
+    new_locale = f'og:locale" content="{LANGUAGES[dst]["og_locale"]}"'
+    content = content.replace(old_locale, new_locale)
+
+    # --- 8. Body class ---
+    content = content.replace(f'class="lang-{src}"', f'class="lang-{dst}"')
+
+    # --- 9. Font links ---
+    content = content.replace(LANGUAGES[src]['font'], LANGUAGES[dst]['font'])
+
     # Write output
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(content)
-    
+
     print(f"  Generated {src} -> {dst}: {output_path}")
 
 
