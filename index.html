@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruijian Petroleum Equipment — API 5CT OCTG Manufacturer</title>
+  <meta name="description" content="Heilongjiang Ruijian Petroleum Equipment Co., Ltd. — Professional API 5CT oil casing, tubing, drill pipe manufacturer. 150,000 tons annual capacity.">
+  <link rel="canonical" href="https://www.ruijianoil.com/">
+  <link rel="alternate" hreflang="zh" href="https://www.ruijianoil.com/zh/">
+  <link rel="alternate" hreflang="en" href="https://www.ruijianoil.com/en/">
+  <link rel="alternate" hreflang="ar" href="https://www.ruijianoil.com/ar/">
+  <link rel="alternate" hreflang="ru" href="https://www.ruijianoil.com/ru/">
+  <link rel="alternate" hreflang="es" href="https://www.ruijianoil.com/es/">
+  <link rel="alternate" hreflang="fr" href="https://www.ruijianoil.com/fr/">
+  <link rel="alternate" hreflang="x-default" href="https://www.ruijianoil.com/">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
+  
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Heilongjiang Ruijian Petroleum Equipment Co., Ltd.",
+    "alternateName": "Ruijian Petroleum Equipment",
+    "url": "https://www.ruijianoil.com",
+    "description": "Professional API 5CT OCTG manufacturer and global exporter.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "CN"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+86-18618191088",
+      "contactType": "sales"
+    }
+  }
+  </script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a1628;
+      color: #fff;
+      font-family: Inter, 'Helvetica Neue', Arial, sans-serif;
+    }
+    .loading {
+      text-align: center;
+    }
+    .loading-icon {
+      width: 64px;
+      height: 64px;
+      background: #e8a838;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #0a1628;
+    }
+    .loading h1 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: #e8a838;
+      border-radius: 50%;
+      margin: 20px auto;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="loading">
+    <div class="loading-icon">R</div>
+    <h1>Ruijian Petroleum Equipment</h1>
+    <div class="spinner"></div>
+    <p style="font-size:0.8rem;opacity:0.5;margin-top:8px;">Redirecting to your language...</p>
+  </div>
+  
+  <script>
+  // GeoIP-based language detection
+  (function() {
+    const LANG_MAP = {
+      'zh': { path: '/zh/', name: '中文' },
+      'en': { path: '/en/', name: 'English' },
+      'ar': { path: '/ar/', name: 'العربية' },
+      'ru': { path: '/ru/', name: 'Русский' },
+      'es': { path: '/es/', name: 'Español' },
+      'fr': { path: '/fr/', name: 'Français' }
+    };
+    
+    const GEO_MAP = {
+      CN:'zh',TW:'zh',HK:'zh',MO:'zh',
+      US:'en',GB:'en',AU:'en',CA:'en',IN:'en',SG:'en',
+      SA:'ar',AE:'ar',IQ:'ar',KW:'ar',QA:'ar',OM:'ar',EG:'ar',
+      RU:'ru',KZ:'ru',UZ:'ru',
+      MX:'es',ES:'es',VE:'es',CO:'es',AR:'es',
+      FR:'fr',DZ:'fr',MA:'fr',TN:'fr'
+    };
+
+    function getLang() {
+      // Check cookie
+      var match = document.cookie.match(/(^| )ruijian_lang=([^;]+)/);
+      if (match && LANG_MAP[match[2]]) return match[2];
+      
+      // Check browser
+      var navLang = (navigator.language || navigator.userLanguage || '').split('-')[0].toLowerCase();
+      if (LANG_MAP[navLang]) return navLang;
+      if (navLang.startsWith('zh')) return 'zh';
+      
+      return null;
+    }
+
+    function redirectByIP() {
+      var saved = getLang();
+      if (saved) { window.location.href = LANG_MAP[saved].path; return; }
+      
+      // Try GeoIP
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'https://ipapi.co/json/', true);
+      xhr.timeout = 3000;
+      xhr.onload = function() {
+        try {
+          var data = JSON.parse(xhr.responseText);
+          var code = data.country_code;
+          var lang = GEO_MAP[code] || 'en';
+          window.location.href = LANG_MAP[lang].path;
+        } catch(e) {
+          window.location.href = '/en/';
+        }
+      };
+      xhr.onerror = function() { window.location.href = '/en/'; };
+      xhr.send();
+    }
+    
+    redirectByIP();
+  })();
+  </script>
+</body>
+</html>
