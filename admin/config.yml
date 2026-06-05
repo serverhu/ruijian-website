@@ -3,9 +3,9 @@
 
 backend:
   name: github
-  repo: serverhu/ruijian-website    # 你的仓库地址
-  branch: main                       # 推送到 main 分支触发部署
-  base_url: https://ruijian.pages.dev
+  repo: serverhu/ruijian-website
+  branch: main
+  # 使用 Personal Access Token 登录，不需要 OAuth
 
 # 本地预览时不需要认证
 local_backend: true
