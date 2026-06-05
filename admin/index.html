@@ -5,9 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>瑞建石油装备 - 管理后台</title>
   <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  </style>
 </head>
 <body>
-  <!-- Decap CMS 脚本，自动加载管理界面 -->
+  <script>
+    // 必须先设置这个，阻止 CMS 自动初始化（避免跳 Netlify）
+    window.CMS_MANUAL_INIT = true
+  </script>
   <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
+  <script>
+    // 手动初始化，不走 Netlify OAuth
+    CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'serverhu/ruijian-website',
+          branch: 'main',
+          // 不设 base_url，CMS 会弹 PAT 输入框
+        },
+        media_folder: 'images/uploads',
+        public_folder: '/images/uploads',
+        collections: [
+          {
+            name: 'settings',
+            label: '网站设置',
+            files: [
+              {
+                name: 'company',
+                label: '公司信息',
+                file: 'data/company.yml',
+                fields: [
+                  { label: '公司名称', name: 'name', widget: 'string' },
+                  { label: '联系电话', name: 'phone', widget: 'string' },
+                  { label: '邮箱', name: 'email', widget: 'string' },
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    })
+  </script>
 </body>
 </html>
