@@ -3,8 +3,7 @@ backend:
   name: github
   repo: serverhu/ruijian-website
   branch: main
-  base_url: https://ruijian.pages.dev
-  auth_endpoint: api/auth
+  base_url: https://ruijian-cms-auth.serverhu2008.workers.dev
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
